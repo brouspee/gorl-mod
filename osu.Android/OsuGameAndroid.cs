@@ -70,24 +70,23 @@ namespace osu.Android
 
             try
             {
-                // Инициализируем мост для Catch
+                // БАГ FIX: ModMenuBridge.Init раньше принимал 3 параметра, но OsuGameAndroid
+                // передавал 4 (с bigHitbox) → ошибка компиляции. Теперь сигнатуры совпадают.
                 ModMenuBridge.Init(
-                    autoPlay:   () => ModMenu.AutoPlayEnabled,
-                    noMiss:     () => ModMenu.NoMissEnabled,
-                    relax:      () => ModMenu.RelaxEnabled,
-                    bigHitbox:  () => ModMenu.BigHitboxEnabled
+                    autoPlay:  () => ModMenu.AutoPlayEnabled,
+                    noMiss:    () => ModMenu.NoMissEnabled,
+                    relax:     () => ModMenu.RelaxEnabled,
+                    bigHitbox: () => ModMenu.BigHitboxEnabled
                 );
 
-                // Инициализируем мост для osu!
                 OsuModMenuBridge.Init(
-                    autoPlay:   () => ModMenu.AutoPlayEnabled,
-                    noMiss:     () => ModMenu.NoMissEnabled,
-                    relax:      () => ModMenu.RelaxEnabled,
-                    bigHitbox:  () => ModMenu.BigHitboxEnabled
+                    autoPlay:  () => ModMenu.AutoPlayEnabled,
+                    noMiss:    () => ModMenu.NoMissEnabled,
+                    relax:     () => ModMenu.RelaxEnabled,
+                    bigHitbox: () => ModMenu.BigHitboxEnabled
                 );
 
                 isModIntegrationSetup = true;
-
                 global::Android.Util.Log.Info("OsuGameAndroid", "ModMenu bridges initialised");
             }
             catch (Exception ex)

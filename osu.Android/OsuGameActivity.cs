@@ -86,8 +86,8 @@ namespace osu.Android
         protected override void OnResume()
         {
             base.OnResume();
-            // Не показываем автоматически — только по нажатию кнопки
-            if (overlay == null) tryInitialiseOverlay();
+            if (overlay == null)
+                tryInitialiseOverlay();
         }
 
         protected override void OnPause()
@@ -96,20 +96,13 @@ namespace osu.Android
             base.OnPause();
         }
 
-        // Вызывается из кастомной кнопки (например volume down, back, или floating button)
-        // Три нажатия: 1=osu меню, 2=catch меню, 3=скрыть
-        public void OnMenuButtonTap()
-        {
-            if (overlay == null) tryInitialiseOverlay();
-            overlay?.OnMenuButtonPressed();
-        }
-
         public override bool OnKeyDown(Keycode keyCode, KeyEvent? e)
         {
-            // Volume Down = кнопка открытия меню
+            // Volume Down = переключение страниц меню
             if (keyCode == Keycode.VolumeDown)
             {
-                OnMenuButtonTap();
+                if (overlay == null) tryInitialiseOverlay();
+                overlay?.OnMenuButtonPressed();
                 return true;
             }
             return base.OnKeyDown(keyCode, e);
@@ -137,7 +130,9 @@ namespace osu.Android
             }
 
             overlay = new ModMenuOverlay(this);
-            // Не показываем сразу — ждём нажатия кнопки
+            // БАГ FIX: InitTrigger() создаёт полупрозрачную кнопку ≡ в левом верхнем углу.
+            // Раньше это не вызывалось — кнопка не появлялась, меню нельзя было открыть.
+            overlay.InitTrigger();
         }
 
         protected override void OnNewIntent(Intent? intent)
