@@ -1,4 +1,4 @@
-﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
+// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
@@ -27,14 +27,8 @@ namespace osu.Game.Rulesets.Catch.Objects.Drawables
 
         public Bindable<int> IndexInBeatmap { get; } = new Bindable<int>();
 
-        /// <summary>
-        /// The multiplicative factor applied to <see cref="Drawable.Scale"/> relative to <see cref="HitObject"/> scale.
-        /// </summary>
         protected virtual float ScaleFactor => 1;
 
-        /// <summary>
-        /// The container internal transforms (such as scaling based on the circle size) are applied to.
-        /// </summary>
         protected readonly Container ScalingContainer;
 
         public Vector2 DisplayPosition => DrawPosition;
@@ -42,6 +36,8 @@ namespace osu.Game.Rulesets.Catch.Objects.Drawables
         public Vector2 DisplaySize => ScalingContainer.Size * ScalingContainer.Scale;
 
         public float DisplayRotation => ScalingContainer.Rotation;
+
+        private const float BIG_HITBOX_MULTIPLIER = 2.5f;
 
         protected DrawablePalpableCatchHitObject(CatchHitObject? h)
             : base(h)
@@ -72,18 +68,22 @@ namespace osu.Game.Rulesets.Catch.Objects.Drawables
             IndexInBeatmap.BindValueChanged(_ => UpdateComboColour());
         }
 
+        protected override void Update()
+        {
+            base.Update();
+            float hitboxMult = ModMenuBridge.BigHitboxEnabled ? BIG_HITBOX_MULTIPLIER : 1.0f;
+            float baseSize = CatchHitObject.OBJECT_RADIUS * 2 * (ScaleBindable.Value * ScaleFactor);
+            Size = new Vector2(baseSize * hitboxMult);
+        }
+
         private void updateXPosition(ValueChangedEvent<float> _)
         {
-            // same as `CatchHitObject.EffectiveX`.
-            // not using that property directly to support scenarios where `HitObject` may not necessarily be present
-            // for this pooled drawable.
             X = Math.Clamp(OriginalXBindable.Value + XOffsetBindable.Value, 0, CatchPlayfield.WIDTH);
         }
 
         protected override void OnApply()
         {
             base.OnApply();
-
             HyperDash.BindTo(HitObject.HyperDashBindable);
             ScaleBindable.BindTo(HitObject.ScaleBindable);
             IndexInBeatmap.BindTo(HitObject.IndexInBeatmapBindable);
@@ -94,7 +94,6 @@ namespace osu.Game.Rulesets.Catch.Objects.Drawables
             HyperDash.UnbindFrom(HitObject.HyperDashBindable);
             ScaleBindable.UnbindFrom(HitObject.ScaleBindable);
             IndexInBeatmap.UnbindFrom(HitObject.IndexInBeatmapBindable);
-
             base.OnFree();
         }
 

@@ -1,4 +1,4 @@
-﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
+// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
@@ -14,7 +14,9 @@ using osuTK.Graphics;
 
 namespace osu.Game.Rulesets.Catch.Objects
 {
-    public class Banana : PalpableCatchHitObject, IHasComboInformation
+    // Banana extends PalpableCatchHitObject which extends CatchHitObject which already implements IHasComboInformation.
+    // We do NOT re-declare IHasComboInformation here to avoid CS0535 "does not implement interface member" errors.
+    public class Banana : PalpableCatchHitObject
     {
         /// <summary>
         /// Index of banana in current shower.
