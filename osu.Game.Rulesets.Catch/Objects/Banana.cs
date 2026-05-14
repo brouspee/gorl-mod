@@ -14,9 +14,7 @@ using osuTK.Graphics;
 
 namespace osu.Game.Rulesets.Catch.Objects
 {
-    // Banana extends PalpableCatchHitObject which extends CatchHitObject which already implements IHasComboInformation.
-    // We do NOT re-declare IHasComboInformation here to avoid CS0535 "does not implement interface member" errors.
-    public class Banana : PalpableCatchHitObject
+    public class Banana : PalpableCatchHitObject, IHasComboInformation
     {
         /// <summary>
         /// Index of banana in current shower.

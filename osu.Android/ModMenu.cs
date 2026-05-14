@@ -15,7 +15,7 @@ namespace osu.Android
         private static bool instantSpin;
         private static bool forceRanked;
         private static bool catchAssist;
-        private static bool bigHitbox;   // НОВЫЙ флаг — увеличенные хитбоксы
+        private static bool bigHitbox;
 
         public static event Action? OnStateChanged;
 
@@ -27,12 +27,21 @@ namespace osu.Android
         public static bool CatchAssistEnabled{ get { lock (sync) return catchAssist; } }
         public static bool BigHitboxEnabled  { get { lock (sync) return bigHitbox;   } }
 
+        /// <summary>
+        /// Когда включён NoMiss — NF и Easy скрываются из меню (не нужны).
+        /// Когда включён AutoPlay — Relax несовместим.
+        /// </summary>
         public static void ToggleAutoPlay()
         {
             lock (sync)
             {
                 autoPlay = !autoPlay;
-                if (autoPlay) { noMiss = true; relax = false; }
+                // AutoPlay подразумевает NoMiss; relax несовместим с autoplay
+                if (autoPlay)
+                {
+                    noMiss = true;
+                    relax = false;
+                }
             }
             fire();
         }
@@ -41,8 +50,11 @@ namespace osu.Android
         {
             lock (sync)
             {
+                // NoMiss нельзя выключить когда AutoPlay активен
                 if (autoPlay) return;
                 noMiss = !noMiss;
+                // Если выключаем NoMiss — снять и AutoPlay на случай рассинхрона
+                if (!noMiss) autoPlay = false;
             }
             fire();
         }
@@ -52,7 +64,8 @@ namespace osu.Android
             lock (sync)
             {
                 relax = !relax;
-                if (relax) { autoPlay = false; noMiss = false; }
+                // Relax несовместим с AutoPlay
+                if (relax) autoPlay = false;
             }
             fire();
         }

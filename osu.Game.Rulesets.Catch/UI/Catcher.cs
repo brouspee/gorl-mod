@@ -8,6 +8,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Pooling;
 using osu.Game.Beatmaps;
+using osu.Game.Rulesets.Catch;
 using osu.Game.Rulesets.Catch.Judgements;
 using osu.Game.Rulesets.Catch.Objects;
 using osu.Game.Rulesets.Catch.Objects.Drawables;
@@ -71,7 +72,9 @@ namespace osu.Game.Rulesets.Catch.UI
             if (hitObject is not PalpableCatchHitObject fruit)
                 return false;
 
-            float halfCatchWidth = CatchWidth / 2;
+            // BigHitbox: расширяем зону поимки в 2.5 раза по каждой стороне
+            float catchWidthMult = ModMenuBridge.BigHitboxEnabled ? 2.5f : 1.0f;
+            float halfCatchWidth = CatchWidth / 2 * catchWidthMult;
             return fruit.EffectiveX >= X - halfCatchWidth &&
                    fruit.EffectiveX <= X + halfCatchWidth;
         }

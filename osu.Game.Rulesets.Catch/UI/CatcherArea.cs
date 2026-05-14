@@ -96,7 +96,12 @@ namespace osu.Game.Rulesets.Catch.UI
                 float? targetX = findNearestFruitX();
                 if (targetX.HasValue)
                 {
-                    float maxDelta = (float)(Catcher.BASE_DASH_SPEED * 2.0 * Clock.ElapsedFrameTime);
+                    float dist = Math.Abs(targetX.Value - Catcher.X);
+                    // Use hyperdash speed (unlimited) when far, dash when medium distance
+                    float speed = dist > 100
+                        ? (float)(Catcher.BASE_DASH_SPEED * 4.0) // fast enough for any hyper dash
+                        : (float)(Catcher.BASE_DASH_SPEED * 1.5);
+                    float maxDelta = (float)(speed * Clock.ElapsedFrameTime);
                     float newX = Catcher.X + Math.Clamp(targetX.Value - Catcher.X, -maxDelta, maxDelta);
                     SetCatcherPosition(newX);
                     return;
@@ -115,17 +120,27 @@ namespace osu.Game.Rulesets.Catch.UI
 
             float? nearest = null;
             double nearestTime = double.MaxValue;
+            double currentTime = playfield.Clock.CurrentTime;
 
             foreach (var obj in playfield.HitObjectContainer.AliveObjects)
             {
-                if (obj.HitObject is PalpableCatchHitObject palpable)
+                // Check both top-level and nested objects (droplets, tiny droplets)
+                checkObject(obj.HitObject);
+                foreach (var nested in obj.HitObject.NestedHitObjects)
+                    checkObject(nested as CatchHitObject);
+            }
+
+            void checkObject(CatchHitObject? hitObject)
+            {
+                if (hitObject is not PalpableCatchHitObject palpable) return;
+                // Only look at objects that are close in time (within 600ms ahead)
+                double dt = palpable.StartTime - currentTime;
+                if (dt < -100 || dt > 600) return;
+                double t = Math.Abs(dt);
+                if (t < nearestTime)
                 {
-                    double t = Math.Abs(obj.HitObject.StartTime - playfield.Clock.CurrentTime);
-                    if (t < nearestTime)
-                    {
-                        nearestTime = t;
-                        nearest = palpable.EffectiveX;
-                    }
+                    nearestTime = t;
+                    nearest = palpable.EffectiveX;
                 }
             }
 

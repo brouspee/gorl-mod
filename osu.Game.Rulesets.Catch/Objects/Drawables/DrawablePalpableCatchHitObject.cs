@@ -6,6 +6,7 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Rulesets.Catch;
 using osu.Game.Rulesets.Catch.UI;
 using osuTK;
 using osuTK.Graphics;
@@ -71,9 +72,12 @@ namespace osu.Game.Rulesets.Catch.Objects.Drawables
         protected override void Update()
         {
             base.Update();
-            float hitboxMult = ModMenuBridge.BigHitboxEnabled ? BIG_HITBOX_MULTIPLIER : 1.0f;
+            // BigHitbox: расширяем ТОЛЬКО зону захвата (Size = хитбокс),
+            // визуальный контейнер (ScalingContainer) остаётся прежнего размера
             float baseSize = CatchHitObject.OBJECT_RADIUS * 2 * (ScaleBindable.Value * ScaleFactor);
+            float hitboxMult = ModMenuBridge.BigHitboxEnabled ? BIG_HITBOX_MULTIPLIER : 1.0f;
             Size = new Vector2(baseSize * hitboxMult);
+            // ScalingContainer центрирован — визуал не меняется
         }
 
         private void updateXPosition(ValueChangedEvent<float> _)
