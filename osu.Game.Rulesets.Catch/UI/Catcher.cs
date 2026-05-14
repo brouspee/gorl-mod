@@ -42,7 +42,7 @@ namespace osu.Game.Rulesets.Catch.UI
 
         public double Speed => (Dashing ? BASE_DASH_SPEED : BASE_WALK_SPEED) * hyperDashModifier;
 
-        public float CatchWidth => BASE_SIZE * AbsoluteScale.X * ALLOWED_CATCH_RANGE;
+        public float CatchWidth => BASE_SIZE * Scale.X * ALLOWED_CATCH_RANGE;
 
         public Vector2 BodyScale => Scale * catcherScale;
 
