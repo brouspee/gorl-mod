@@ -16,7 +16,7 @@ namespace osu.Game.Rulesets.Osu.Scoring
         /// <summary>
         /// osu! ruleset has a fixed miss window regardless of difficulty settings.
         /// </summary>
-        public const double MISS_WINDOW = 400;
+        public const double MISS_WINDOW = 10;
 
         private double great;
         private double ok;
