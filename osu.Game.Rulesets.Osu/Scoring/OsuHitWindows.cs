@@ -23,13 +23,13 @@ namespace osu.Game.Rulesets.Osu.Scoring
         private const double NOMISS_GREAT = 140;
         private const double NOMISS_OK    = 220;
         private const double NOMISS_MEH   = 320;
-        private const double NOMISS_MISS  = 500;
+        private const double NOMISS_MISS  = 50;
 
         // Стандартные фиксированные окна (без NoMiss)
-        private const double NORMAL_GREAT = 80;
-        private const double NORMAL_OK    = 140;
-        private const double NORMAL_MEH   = 200;
-        private const double NORMAL_MISS  = 400;
+        private const double NORMAL_GREAT = 130;
+        private const double NORMAL_OK    = 200;
+        private const double NORMAL_MEH   = 320;
+        private const double NORMAL_MISS  = 40;
 
         private double great;
         private double ok;
