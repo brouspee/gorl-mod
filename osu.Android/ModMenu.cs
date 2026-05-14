@@ -11,7 +11,6 @@ namespace osu.Android
         private static readonly object sync = new object();
 
         private static bool autoPlay;
-        private static bool noMiss;
         private static bool relax;
         private static bool instantSpin;
         private static bool forceRanked;
@@ -21,43 +20,26 @@ namespace osu.Android
         public static event Action? OnStateChanged;
 
         public static bool AutoPlayEnabled   { get { lock (sync) return autoPlay;    } }
-        public static bool NoMissEnabled     { get { lock (sync) return noMiss;      } }
+        public static bool NoMissEnabled       { get { lock (sync) return false;      } }
         public static bool RelaxEnabled      { get { lock (sync) return relax;       } }
         public static bool InstantSpinEnabled{ get { lock (sync) return instantSpin; } }
         public static bool ForceRankedEnabled{ get { lock (sync) return forceRanked; } }
         public static bool CatchAssistEnabled{ get { lock (sync) return catchAssist; } }
         public static bool BigHitboxEnabled  { get { lock (sync) return bigHitbox;   } }
 
-        /// <summary>
-        /// Когда включён NoMiss — NF и Easy скрываются из меню (не нужны).
-        /// Когда включён AutoPlay — Relax несовместим.
-        /// </summary>
         public static void ToggleAutoPlay()
         {
             lock (sync)
             {
                 autoPlay = !autoPlay;
-                // AutoPlay подразумевает NoMiss; relax несовместим с autoplay
-                if (autoPlay)
-                {
-                    noMiss = true;
-                    relax = false;
-                }
+                if (autoPlay) relax = false;
             }
             fire();
         }
 
         public static void ToggleNoMiss()
         {
-            lock (sync)
-            {
-                // NoMiss нельзя выключить когда AutoPlay активен
-                if (autoPlay) return;
-                noMiss = !noMiss;
-                // Если выключаем NoMiss — снять и AutoPlay на случай рассинхрона
-                if (!noMiss) autoPlay = false;
-            }
-            fire();
+            // NoMiss убран - ничего не делает
         }
 
         public static void ToggleRelax()
@@ -65,7 +47,6 @@ namespace osu.Android
             lock (sync)
             {
                 relax = !relax;
-                // Relax несовместим с AutoPlay
                 if (relax) autoPlay = false;
             }
             fire();
@@ -99,7 +80,7 @@ namespace osu.Android
         {
             lock (sync)
             {
-                autoPlay = noMiss = relax = instantSpin =
+                autoPlay = relax = instantSpin =
                 forceRanked = catchAssist = bigHitbox = false;
             }
             fire();
@@ -109,7 +90,7 @@ namespace osu.Android
         {
             lock (sync)
             {
-                return $"AutoPlay={autoPlay} NoMiss={noMiss} Relax={relax} " +
+                return $"AutoPlay={autoPlay} Relax={relax} " +
                        $"InstantSpin={instantSpin} ForceRanked={forceRanked} " +
                        $"CatchAssist={catchAssist} BigHitbox={bigHitbox}";
             }
@@ -128,7 +109,5 @@ namespace osu.Android
 
 
 // ---- PATCHED ----
-// Menu state persistence enabled.
-// NoMiss auto-force removed.
-// BigHitbox now handles relaxed timing assist.
+// NoMiss полностью убран.
 // -----------------

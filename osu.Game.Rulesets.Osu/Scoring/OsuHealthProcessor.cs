@@ -43,10 +43,8 @@ namespace osu.Game.Rulesets.Osu.Scoring
 
         protected override bool CheckDefaultFailCondition(JudgementResult result)
         {
-            // NoMiss: никогда не проваливаемся
-            if (OsuModMenuBridge.NoMissEnabled)
-                return false;
-
+            // NoMiss отключён — позволяем нормально проигрывать
+            // BigHitbox только расширяет окна, не отключает фейлы
             return base.CheckDefaultFailCondition(result);
         }
 
@@ -57,16 +55,19 @@ namespace osu.Game.Rulesets.Osu.Scoring
             switch (result)
             {
                 case HitResult.SmallTickMiss:
-                    // NoMiss: нет потери здоровья
-                    if (OsuModMenuBridge.NoMissEnabled) return 0;
+                    // BigHitbox: меньше штраф за мелкие миссы
+                    if (OsuModMenuBridge.BigHitboxEnabled)
+                        return IBeatmapDifficultyInfo.DifficultyRange(Beatmap.Difficulty.DrainRate, -0.01, -0.04, -0.07);
                     return IBeatmapDifficultyInfo.DifficultyRange(Beatmap.Difficulty.DrainRate, -0.02, -0.075, -0.14);
 
                 case HitResult.LargeTickMiss:
-                    if (OsuModMenuBridge.NoMissEnabled) return 0;
+                    if (OsuModMenuBridge.BigHitboxEnabled)
+                        return IBeatmapDifficultyInfo.DifficultyRange(Beatmap.Difficulty.DrainRate, -0.01, -0.04, -0.07);
                     return IBeatmapDifficultyInfo.DifficultyRange(Beatmap.Difficulty.DrainRate, -0.02, -0.075, -0.14);
 
                 case HitResult.Miss:
-                    if (OsuModMenuBridge.NoMissEnabled) return 0;
+                    if (OsuModMenuBridge.BigHitboxEnabled)
+                        return IBeatmapDifficultyInfo.DifficultyRange(Beatmap.Difficulty.DrainRate, -0.015, -0.06, -0.1);
                     return IBeatmapDifficultyInfo.DifficultyRange(Beatmap.Difficulty.DrainRate, -0.03, -0.125, -0.2);
 
                 case HitResult.SmallTickHit:

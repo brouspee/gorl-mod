@@ -29,8 +29,8 @@ namespace osu.Game.Rulesets.Catch.Scoring
 
         protected override bool CheckDefaultFailCondition(JudgementResult result)
         {
-            // Если NoMiss активен через ModMenuBridge — никогда не проваливаемся
-            if (ModMenuBridge.NoMissEnabled)
+            // Если BigHitbox активен — никогда не проваливаемся
+            if (ModMenuBridge.BigHitboxEnabled)
                 return false;
 
             // tiny droplet не может вызвать провал
@@ -55,8 +55,8 @@ namespace osu.Game.Rulesets.Catch.Scoring
 
                 case HitResult.LargeTickMiss:
                 case HitResult.Miss:
-                    // Если NoMiss активен — потеря здоровья за промах = 0
-                    if (ModMenuBridge.NoMissEnabled)
+                    // Если BigHitbox активен — меньше штраф = 0
+                    if (ModMenuBridge.BigHitboxEnabled)
                         return 0;
                     return IBeatmapDifficultyInfo.DifficultyRange(
                         Beatmap.Difficulty.DrainRate, -0.03, -0.125, -0.2);

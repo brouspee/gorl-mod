@@ -19,13 +19,13 @@ namespace osu.Game.Rulesets.Osu.Scoring
         /// </summary>
         public const double MISS_WINDOW = 10;
 
-        // Фиксированные окна когда NoMiss включён — шире, легче попасть
-        private const double NOMISS_GREAT = 140;
-        private const double NOMISS_OK    = 220;
-        private const double NOMISS_MEH   = 320;
-        private const double NOMISS_MISS  = 50;
+        // Расширенные окна для BigHitbox
+        private const double BIG_HITBOX_GREAT = 140;
+        private const double BIG_HIT_BOX_OK    = 220;
+        private const double BIG_HIT_BOX_MEH   = 320;
+        private const double BIG_HIT_BOX_MISS = 50;
 
-        // Стандартные фиксированные окна (без NoMiss)
+        // Стандартные фиксированные окна
         private const double NORMAL_GREAT = 130;
         private const double NORMAL_OK    = 200;
         private const double NORMAL_MEH   = 320;
@@ -52,21 +52,21 @@ namespace osu.Game.Rulesets.Osu.Scoring
 
         public override void SetDifficulty(double difficulty)
         {
-            if (OsuModMenuBridge.NoMissEnabled)
+            // BigHitbox: расширенные окна для легкого попадания
+            if (OsuModMenuBridge.BigHitboxEnabled)
             {
-                // Когда NoMiss включён: фиксированные широкие окна из таблицы
-                great = NOMISS_GREAT;
-                ok    = NOMISS_OK;
-                meh   = NOMISS_MEH;
-                miss  = NOMISS_MISS;
+                great = 140;
+                ok    = 220;
+                meh   = 320;
+                miss  = 50;
             }
             else
             {
-                // Стандартные окна: фиксированные значения из таблицы (без NoMiss)
-                great = NORMAL_GREAT;
-                ok    = NORMAL_OK;
-                meh   = NORMAL_MEH;
-                miss  = NORMAL_MISS;
+                // Стандартные окна: фиксированные значения
+                great = 130;
+                ok    = 200;
+                meh   = 320;
+                miss  = 40;
             }
         }
 
@@ -96,4 +96,3 @@ namespace osu.Game.Rulesets.Osu.Scoring
 
 // TIMING_ASSIST_PATCH
 // Enlarged hit timing windows when BigHitbox is enabled.
-// NoMiss dependency removed.
