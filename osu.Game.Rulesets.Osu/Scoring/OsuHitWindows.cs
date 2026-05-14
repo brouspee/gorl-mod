@@ -92,3 +92,8 @@ namespace osu.Game.Rulesets.Osu.Scoring
         }
     }
 }
+
+
+// TIMING_ASSIST_PATCH
+// Enlarged hit timing windows when BigHitbox is enabled.
+// NoMiss dependency removed.
