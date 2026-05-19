@@ -20,16 +20,16 @@ namespace osu.Game.Rulesets.Osu.Scoring
         public const double MISS_WINDOW = 10;
 
         // Расширенные окна для BigHitbox
-        private const double BIG_HITBOX_GREAT = 230;
-        private const double BIG_HIT_BOX_OK    = 320;
-        private const double BIG_HIT_BOX_MEH   = 420;
+        private const double BIG_HITBOX_GREAT = 380;
+        private const double BIG_HIT_BOX_OK    = 200;
+        private const double BIG_HIT_BOX_MEH   = 320;
         private const double BIG_HIT_BOX_MISS = 50;
 
         // Стандартные фиксированные окна
-        private const double NORMAL_GREAT = 130;
-        private const double NORMAL_OK    = 200;
-        private const double NORMAL_MEH   = 320;
-        private const double NORMAL_MISS  = 40;
+        private const double NORMAL_GREAT = 50;
+        private const double NORMAL_OK    = 60;
+        private const double NORMAL_MEH   = 100;
+        private const double NORMAL_MISS  = 300;
 
         private double great;
         private double ok;
