@@ -22,6 +22,8 @@ namespace osu.Game.Rulesets.Osu.Mods
     {
         public override LocalisableString Description => @"You don't need to click. Give your clicking/tapping fingers a break from the heat of things.";
 
+        public override double ScoreMultiplier => 1.0;
+
         public override Type[] IncompatibleMods =>
             base.IncompatibleMods.Concat(new[] { typeof(OsuModAutopilot), typeof(OsuModMagnetised), typeof(OsuModAlternate), typeof(OsuModSingleTap) }).ToArray();
 
