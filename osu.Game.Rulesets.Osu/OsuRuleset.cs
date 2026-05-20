@@ -1,4 +1,4 @@
-﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
+// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
@@ -196,7 +196,6 @@ namespace osu.Game.Rulesets.Osu
                     return new Mod[]
                     {
                         new MultiMod(new OsuModAutoplay(), new OsuModCinema()),
-                        new OsuModRelax(),
                         new OsuModAutopilot(),
                         new OsuModSpunOut(),
                     };
@@ -204,6 +203,7 @@ namespace osu.Game.Rulesets.Osu
                 case ModType.Fun:
                     return new Mod[]
                     {
+                        new OsuModRelax(),
                         new OsuModTransform(),
                         new OsuModWiggle(),
                         new OsuModSpinIn(),
